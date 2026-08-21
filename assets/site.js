@@ -2,19 +2,20 @@ const forms = document.querySelectorAll("[data-rfq-form]");
 
 forms.forEach((form) => {
   form.addEventListener("submit", (event) => {
-    event.preventDefault();
-    const formData = new FormData(form);
-    const lines = [];
-
-    for (const [key, value] of formData.entries()) {
-      if (value) lines.push(`${key}: ${value}`);
+    const submitButton = form.querySelector("button[type='submit']");
+    if (submitButton) {
+      submitButton.textContent = "Sending...";
+      submitButton.disabled = true;
     }
-
-    const subject = encodeURIComponent("Crystaring RFQ / Catalogue Request");
-    const body = encodeURIComponent(lines.join("\n"));
-    window.location.href = `mailto:sales@crystaring.com?subject=${subject}&body=${body}`;
   });
 });
+
+if (new URLSearchParams(window.location.search).get("submitted") === "1") {
+  const message = document.querySelector("[data-form-success]");
+  if (message) {
+    message.hidden = false;
+  }
+}
 
 document.querySelectorAll(".gallery-shell").forEach((shell) => {
   const gallery = shell.querySelector("[data-gallery], [data-factory-gallery]");
