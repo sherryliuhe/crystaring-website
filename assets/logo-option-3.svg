@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180" role="img" aria-label="Crystaring round seal logo">
+  <circle cx="90" cy="90" r="74" fill="#0f5a46"/>
+  <circle cx="90" cy="90" r="61" fill="none" stroke="#d6b46f" stroke-width="5"/>
+  <path d="M105 54c-26-15-59 3-60 36-1 33 34 53 62 35" fill="none" stroke="#f8f1df" stroke-width="9" stroke-linecap="round"/>
+  <circle cx="84" cy="57" r="8" fill="#f8f1df"/>
+  <path d="M88 66l23 34" fill="none" stroke="#f8f1df" stroke-width="7" stroke-linecap="round"/>
+  <path d="M105 79l36 33" fill="none" stroke="#d6b46f" stroke-width="6" stroke-linecap="round"/>
+  <ellipse cx="145" cy="116" rx="12" ry="8" fill="none" stroke="#d6b46f" stroke-width="6"/>
+</svg>

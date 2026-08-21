@@ -106,6 +106,53 @@ img {
   color: var(--green-2);
 }
 
+.nav-product-menu {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  padding: 14px 0;
+}
+
+.product-dropdown {
+  position: absolute;
+  top: calc(100% - 2px);
+  left: 50%;
+  z-index: 30;
+  display: grid;
+  min-width: 268px;
+  padding: 10px;
+  border: 1px solid rgba(15, 90, 70, 0.14);
+  border-radius: 8px;
+  background: rgba(255, 253, 248, 0.98);
+  box-shadow: 0 18px 42px rgba(24, 51, 45, 0.13);
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, 10px);
+  transition: opacity 160ms ease, transform 160ms ease;
+}
+
+.nav-product-menu:hover .product-dropdown,
+.nav-product-menu:focus-within .product-dropdown {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate(-50%, 0);
+}
+
+.product-dropdown a {
+  display: block;
+  padding: 9px 10px;
+  border-radius: 6px;
+  color: var(--ink-2);
+  font-size: 13px;
+  line-height: 1.25;
+  white-space: nowrap;
+}
+
+.product-dropdown a:hover {
+  background: rgba(15, 90, 70, 0.08);
+  color: var(--green);
+}
+
 .nav-cta,
 .button {
   display: inline-flex;
@@ -701,6 +748,20 @@ h3 {
 
 .other-products-gallery figure {
   flex-basis: min(520px, 82vw);
+}
+
+.art-glass-shell {
+  margin-top: 8px;
+}
+
+.art-glass-gallery figure {
+  flex-basis: min(360px, 78vw);
+}
+
+.art-glass-gallery img {
+  aspect-ratio: 0.86 / 1;
+  background: white;
+  object-fit: contain;
 }
 
 .quality-heading {
