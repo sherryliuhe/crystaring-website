@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://crystaring-vercel-preview.vercel.app/sitemap.xml

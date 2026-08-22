@@ -1,4 +1,22 @@
 const forms = document.querySelectorAll("[data-rfq-form]");
+const mobileMenuButton = document.querySelector(".mobile-menu-toggle");
+const siteNav = document.querySelector(".nav");
+
+if (mobileMenuButton && siteNav) {
+  const setMenuState = (isOpen) => {
+    siteNav.classList.toggle("nav-open", isOpen);
+    mobileMenuButton.setAttribute("aria-expanded", String(isOpen));
+    mobileMenuButton.setAttribute("aria-label", isOpen ? "Close navigation menu" : "Open navigation menu");
+  };
+
+  mobileMenuButton.addEventListener("click", () => {
+    setMenuState(!siteNav.classList.contains("nav-open"));
+  });
+
+  siteNav.querySelectorAll(".nav-links a").forEach((link) => {
+    link.addEventListener("click", () => setMenuState(false));
+  });
+}
 
 forms.forEach((form) => {
   form.addEventListener("submit", (event) => {
