@@ -3,12 +3,36 @@ const mobileMenuButton = document.querySelector(".mobile-menu-toggle");
 const siteNav = document.querySelector(".nav");
 const siteHeader = document.querySelector(".site-header");
 
-const trackAnalyticsEvent = (eventName, parameters = {}) => {
+const trackAnalyticsEvent = (eventName, parameters = {}, callback) => {
   if (typeof window.gtag !== "function") return;
   window.gtag("event", eventName, {
     page_path: window.location.pathname,
+    transport_type: "beacon",
     ...parameters,
+    ...(callback ? { event_callback: callback } : {}),
   });
+};
+
+const trackOutboundContactClick = (event, eventName, parameters = {}) => {
+  const link = event.currentTarget;
+  const href = link.getAttribute("href");
+
+  if (!href || event.defaultPrevented || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || link.target === "_blank") {
+    trackAnalyticsEvent(eventName, parameters);
+    return;
+  }
+
+  event.preventDefault();
+
+  let didNavigate = false;
+  const continueNavigation = () => {
+    if (didNavigate) return;
+    didNavigate = true;
+    window.location.href = href;
+  };
+
+  window.setTimeout(continueNavigation, 250);
+  trackAnalyticsEvent(eventName, parameters, continueNavigation);
 };
 
 if (siteHeader) {
@@ -106,10 +130,31 @@ document.querySelectorAll("a").forEach((link) => {
   const href = link.getAttribute("href") || "";
   const linkText = (link.textContent || "").trim().replace(/\s+/g, " ");
   const lowerText = linkText.toLowerCase();
+  const lowerHref = href.toLowerCase();
 
-  if (href.toLowerCase().startsWith("mailto:info@crystaring.com")) {
-    link.addEventListener("click", () => {
-      trackAnalyticsEvent("email_click", { cta_type: "email" });
+  if (lowerHref.startsWith("mailto:")) {
+    link.addEventListener("click", (event) => {
+      trackOutboundContactClick(event, "email_click", {
+        link_location: link.closest("footer") ? "footer" : "page",
+      });
+    });
+    return;
+  }
+
+  if (lowerHref.startsWith("https://wa.me/")) {
+    link.addEventListener("click", (event) => {
+      trackOutboundContactClick(event, "whatsapp_click", {
+        link_location: link.closest("footer") ? "footer" : "page",
+      });
+    });
+    return;
+  }
+
+  if (lowerHref.startsWith("tel:")) {
+    link.addEventListener("click", (event) => {
+      trackOutboundContactClick(event, "phone_click", {
+        link_location: link.closest("footer") ? "footer" : "page",
+      });
     });
     return;
   }
