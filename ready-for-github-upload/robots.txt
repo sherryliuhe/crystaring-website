@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://crystaring.com/sitemap.xml

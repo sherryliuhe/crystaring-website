@@ -1,6 +1,16 @@
 const forms = document.querySelectorAll("[data-rfq-form]");
 const mobileMenuButton = document.querySelector(".mobile-menu-toggle");
 const siteNav = document.querySelector(".nav");
+const siteHeader = document.querySelector(".site-header");
+
+if (siteHeader) {
+  const updateHeaderState = () => {
+    siteHeader.classList.toggle("is-scrolled", window.scrollY > 8);
+  };
+
+  updateHeaderState();
+  window.addEventListener("scroll", updateHeaderState, { passive: true });
+}
 
 if (mobileMenuButton && siteNav) {
   const setMenuState = (isOpen) => {
@@ -35,6 +45,24 @@ if (new URLSearchParams(window.location.search).get("submitted") === "1") {
   }
 }
 
+const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+if (!reducedMotion && "IntersectionObserver" in window) {
+  const revealItems = document.querySelectorAll("main > section, .category-card, .product-family, .product-item, .process-grid > div, .process-list > div");
+  document.documentElement.classList.add("reveal-ready");
+  revealItems.forEach((item) => item.classList.add("reveal-item"));
+
+  const revealObserver = new IntersectionObserver((entries, observer) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add("is-visible");
+      observer.unobserve(entry.target);
+    });
+  }, { rootMargin: "0px 0px -8% 0px", threshold: 0.08 });
+
+  revealItems.forEach((item) => revealObserver.observe(item));
+}
+
 document.querySelectorAll(".gallery-shell").forEach((shell) => {
   const gallery = shell.querySelector("[data-gallery], [data-factory-gallery]");
   if (!gallery) return;
@@ -63,12 +91,4 @@ document.querySelectorAll(".gallery-shell").forEach((shell) => {
 
   shell.querySelector("[data-gallery-prev]")?.addEventListener("click", () => scrollGallery(-1));
   shell.querySelector("[data-gallery-next]")?.addEventListener("click", () => scrollGallery(1));
-
-  if (gallery.hasAttribute("data-auto-gallery")) {
-    let timer = window.setInterval(() => scrollGallery(1), 1000);
-    shell.addEventListener("mouseenter", () => window.clearInterval(timer));
-    shell.addEventListener("mouseleave", () => {
-      timer = window.setInterval(() => scrollGallery(1), 1000);
-    });
-  }
 });

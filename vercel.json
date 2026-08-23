@@ -1,4 +1,16 @@
 {
   "cleanUrls": true,
-  "trailingSlash": true
+  "trailingSlash": true,
+  "redirects": [
+    {
+      "source": "/capabilities",
+      "destination": "/about/",
+      "permanent": true
+    },
+    {
+      "source": "/capabilities/",
+      "destination": "/about/",
+      "permanent": true
+    }
+  ]
 }
