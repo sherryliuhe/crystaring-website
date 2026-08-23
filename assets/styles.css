@@ -1437,6 +1437,26 @@ textarea {
   margin-top: 12px;
 }
 
+.form-success,
+.form-error {
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 14px 16px;
+}
+
+.form-success {
+  background: #eaf6ef;
+  border: 1px solid rgba(33, 107, 78, 0.22);
+  color: #155d42;
+}
+
+.form-error {
+  background: #fff1ee;
+  border: 1px solid rgba(170, 67, 45, 0.24);
+  color: #8a2f21;
+}
+
 .site-footer {
   background: #102720;
   color: rgba(255, 255, 255, 0.82);

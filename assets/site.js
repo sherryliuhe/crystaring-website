@@ -29,11 +29,68 @@ if (mobileMenuButton && siteNav) {
 }
 
 forms.forEach((form) => {
-  form.addEventListener("submit", (event) => {
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
     const submitButton = form.querySelector("button[type='submit']");
+    const successMessage = form.querySelector("[data-form-success]");
+    const errorMessage = form.querySelector("[data-form-error]");
+    const originalButtonText = submitButton?.dataset.originalText || submitButton?.textContent || "Submit";
+
+    if (submitButton) {
+      submitButton.dataset.originalText = originalButtonText;
+    }
+
+    if (successMessage) {
+      successMessage.hidden = true;
+    }
+
+    if (errorMessage) {
+      errorMessage.hidden = true;
+    }
+
     if (submitButton) {
       submitButton.textContent = "Sending...";
       submitButton.disabled = true;
+    }
+
+    try {
+      const response = await fetch(form.action, {
+        method: form.method || "POST",
+        body: new FormData(form),
+        headers: {
+          Accept: "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Form submission failed");
+      }
+
+      form.reset();
+
+      if (successMessage) {
+        successMessage.hidden = false;
+        successMessage.focus?.();
+        successMessage.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+
+      if (submitButton) {
+        submitButton.textContent = "Submitted";
+      }
+    } catch (error) {
+      if (errorMessage) {
+        errorMessage.hidden = false;
+        errorMessage.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+
+      if (submitButton) {
+        submitButton.textContent = originalButtonText;
+      }
+    } finally {
+      if (submitButton) {
+        submitButton.disabled = false;
+      }
     }
   });
 });
