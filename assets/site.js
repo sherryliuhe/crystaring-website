@@ -55,17 +55,11 @@ forms.forEach((form) => {
     }
 
     try {
-      const response = await fetch(form.action, {
+      await fetch(form.action, {
         method: form.method || "POST",
         body: new FormData(form),
-        headers: {
-          Accept: "application/json",
-        },
+        mode: "no-cors",
       });
-
-      if (!response.ok) {
-        throw new Error("Form submission failed");
-      }
 
       form.reset();
 
