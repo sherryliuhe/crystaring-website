@@ -3,6 +3,14 @@ const mobileMenuButton = document.querySelector(".mobile-menu-toggle");
 const siteNav = document.querySelector(".nav");
 const siteHeader = document.querySelector(".site-header");
 
+const trackAnalyticsEvent = (eventName, parameters = {}) => {
+  if (typeof window.gtag !== "function") return;
+  window.gtag("event", eventName, {
+    page_path: window.location.pathname,
+    ...parameters,
+  });
+};
+
 if (siteHeader) {
   const updateHeaderState = () => {
     siteHeader.classList.toggle("is-scrolled", window.scrollY > 8);
@@ -61,6 +69,11 @@ forms.forEach((form) => {
         mode: "no-cors",
       });
 
+      const formEventName = window.location.pathname.startsWith("/catalogue/")
+        ? "catalogue_request_submit"
+        : "rfq_form_submit";
+      trackAnalyticsEvent(formEventName);
+
       form.reset();
 
       if (successMessage) {
@@ -87,6 +100,44 @@ forms.forEach((form) => {
       }
     }
   });
+});
+
+document.querySelectorAll("a").forEach((link) => {
+  const href = link.getAttribute("href") || "";
+  const linkText = (link.textContent || "").trim().replace(/\s+/g, " ");
+  const lowerText = linkText.toLowerCase();
+
+  if (href.toLowerCase().startsWith("mailto:info@crystaring.com")) {
+    link.addEventListener("click", () => {
+      trackAnalyticsEvent("email_click", { cta_type: "email" });
+    });
+    return;
+  }
+
+  if (href.startsWith("/catalogue/") || lowerText.includes("request catalogue")) {
+    link.addEventListener("click", () => {
+      trackAnalyticsEvent("catalogue_cta_click", {
+        cta_type: "catalogue",
+        link_text: linkText,
+      });
+    });
+    return;
+  }
+
+  if (
+    href.startsWith("/contact/") ||
+    lowerText.includes("send rfq") ||
+    lowerText.includes("request quote") ||
+    lowerText.includes("contact/quote") ||
+    lowerText.includes("contact / quote")
+  ) {
+    link.addEventListener("click", () => {
+      trackAnalyticsEvent("rfq_cta_click", {
+        cta_type: "rfq",
+        link_text: linkText,
+      });
+    });
+  }
 });
 
 if (new URLSearchParams(window.location.search).get("submitted") === "1") {
