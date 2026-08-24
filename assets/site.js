@@ -67,6 +67,7 @@ forms.forEach((form) => {
     const submitButton = form.querySelector("button[type='submit']");
     const successMessage = form.querySelector("[data-form-success]");
     const errorMessage = form.querySelector("[data-form-error]");
+    const nextUrl = form.querySelector("input[name='_next']")?.value;
     const originalButtonText = submitButton?.dataset.originalText || submitButton?.textContent || "Submit";
 
     if (submitButton) {
@@ -99,6 +100,13 @@ forms.forEach((form) => {
       trackAnalyticsEvent(formEventName);
 
       form.reset();
+
+      if (nextUrl) {
+        window.setTimeout(() => {
+          window.location.href = nextUrl;
+        }, 180);
+        return;
+      }
 
       if (successMessage) {
         successMessage.hidden = false;
