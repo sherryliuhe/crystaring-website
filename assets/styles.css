@@ -750,13 +750,24 @@ h3 {
   line-height: 1.62;
 }
 
-.proof-photo img {
+.proof-photo img,
+.proof-photo video {
+  display: block;
+  width: 100%;
   aspect-ratio: 1.42 / 1;
   object-fit: cover;
 }
 
-.proof-photo.wide-photo img {
+.proof-photo.wide-photo img,
+.proof-photo.wide-photo video {
   aspect-ratio: 1.72 / 1;
+}
+
+.proof-photo figcaption {
+  padding: 12px 14px 14px;
+  color: var(--ink-2);
+  font-size: 14px;
+  font-weight: 700;
 }
 
 .portrait-photo img,
@@ -1671,7 +1682,9 @@ textarea {
   }
 
   .proof-photo img,
+  .proof-photo video,
   .proof-photo.wide-photo img,
+  .proof-photo.wide-photo video,
   .portrait-photo img,
   .about-hero-photo img {
     aspect-ratio: 1.25 / 1;
